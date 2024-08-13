@@ -4,22 +4,21 @@ import random
 import hashlib
 import time
 import os
-import requests
 import re
 
-# Gerekli modülleri otomatik olarak yükleyen fonksiyon
-def install_modules():
-    required_modules = ['requests']
-    for module in required_modules:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", module])
+def install_requests():
+    try:
+        import requests
+    except ImportError:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
+        import requests
+    return requests
 
-# Modülleri yükle
-install_modules()
+requests = install_requests()
 
 # Ekranı temizle
 os.system('cls' if os.name == 'nt' else 'clear')
 
-# Başlık
 print()
 print("          /`·.¸")
 print("         /¸...¸`:·")
@@ -32,7 +31,6 @@ print("===================================")
 print("   Call Bomb - by fatiqueos")
 print("===================================")
 
-# Uyarı mesajı
 print("\nUyarı: Her numaraya günde sadece 3 arama yapılabilir. Farklı numaralar için de aynı sınırlama geçerlidir.")
 print("Lütfen bu sınırlamaları dikkate alarak işlem yapınız.")
 print()
@@ -67,8 +65,7 @@ def send_spam(phone_number):
         print('Arama gönderilemedi.')
 
 def is_valid_phone_number(number):
-    # Basit bir telefon numarası doğrulama fonksiyonu
-    pattern = re.compile(r'^\+\d{11,15}$')  # Örneğin, +905555555555 gibi
+    pattern = re.compile(r'^\+\d{11,15}$')
     return pattern.match(number)
 
 def main():
@@ -81,8 +78,8 @@ def main():
         send_spam(phone_number)
         time.sleep(1)
         
-        again = input("Tekrar göndermek ister misiniz? (E/H): ").strip().lower()
-        if again != 'e':
+        again = input("Tekrar göndermek ister misiniz? (Y/N): ").strip().lower()
+        if again != 'y':
             print("Program kapatılıyor.")
             break
 
